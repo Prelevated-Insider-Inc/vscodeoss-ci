@@ -1,0 +1,123 @@
+name: Build and Package VSCode
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_package:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Fetch VSCode Source Code (Unix)
+      run: chmod +x fetch.sh && ./fetch.sh
+      if: startsWith(matrix.os, 'macos') || startsWith(matrix.os, 'ubuntu')
+
+    - name: Fetch VSCode Source Code (Windows NT)
+      run: fetch.cmd
+      if: startsWith(matrix.os, 'windows')
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libx11-dev libxkbfile-dev libsecret-1-dev libxss-dev libnss3 libasound2
+      if: startsWith(matrix.os, 'ubuntu')
+
+    - name: Build and Package VSCode for Windows x64
+      run: |
+        cd src
+        yarn gulp vscode-win32-x64
+      if: startsWith(matrix.os, 'windows')
+
+    - name: Build and Package VSCode for Windows ARM64
+      run: |
+        cd src
+        yarn gulp vscode-win32-arm64
+      if: startsWith(matrix.os, 'windows')
+
+    - name: Build and Package VSCode for Mac OS X or Darwin x64
+      run: |
+        cd src
+        yarn gulp vscode-darwin-x64
+      if: startsWith(matrix.os, 'macos')
+
+    - name: Build and Package VSCode for Mac OS X or Darwin ARM64
+      run: |
+        cd src
+        yarn gulp vscode-darwin-arm64
+      if: startsWith(matrix.os, 'macos')
+
+    - name: Build and Package VSCode for Linux x64
+      run: |
+        cd src
+        yarn gulp vscode-linux-x64
+      if: startsWith(matrix.os, 'ubuntu')
+
+    - name: Build and Package VSCode for Linux ARMHF
+      run: |
+        cd src
+        yarn gulp vscode-darwin-armhf
+      if: startsWith(matrix.os, 'ubuntu')
+
+    - name: Build and Package VSCode for Linux ARM64
+      run: |
+        cd src
+        yarn gulp vscode-darwin-armhf
+      if: startsWith(matrix.os, 'ubuntu')
+
+    - name: Upload ZIP build artifact for Windows x64
+      uses: actions/upload-artifact@v4.0.0
+      with:
+        name: VSCode-win32-x64
+        path: src/VSCode-win32-x64
+      if: startsWith(matrix.os, 'windows')
+
+    - name: Upload ZIP build artifact for Windows ARM64
+      uses: actions/upload-artifact@v4.0.0
+      with:
+        name: VSCode-win32-arm64
+        path: src/VSCode-win32-arm64
+      if: startsWith(matrix.os, 'windows')
+
+    - name: Upload ZIP build artifact for Mac OS X or Darwin x64
+      uses: actions/upload-artifact@v4.0.0
+      with:
+        name: VSCode-darwin-x64
+        path: src/VSCode-darwin-x64
+      if: startsWith(matrix.os, 'macos')
+
+    - name: Upload ZIP build artifact for Mac OS X or Darwin ARM64
+      uses: actions/upload-artifact@v4.0.0
+      with:
+        name: VSCode-darwin-arm64
+        path: src/VSCode-darwin-arm64
+      if: startsWith(matrix.os, 'macos')
+
+    - name: Upload ZIP build artifact for Linux x64
+      uses: actions/upload-artifact@v4.0.0
+      with:
+        name: VSCode-linux-x64
+        path: src/VSCode-linux-x64
+      if: startsWith(matrix.os, 'ubuntu')
+
+    - name: Upload ZIP build artifact for Linux ARMHF
+      uses: actions/upload-artifact@v4.0.0
+      with:
+        name: VSCode-linux-armhf
+        path: src/VSCode-linux-armhf
+      if: startsWith(matrix.os, 'ubuntu')
+
+    - name: Upload ZIP build artifact for Linux ARM64
+      uses: actions/upload-artifact@v4.0.0
+      with:
+        name: VSCode-linux-arm64
+        path: src/VSCode-linux-arm64
+      if: startsWith(matrix.os, 'ubuntu')
