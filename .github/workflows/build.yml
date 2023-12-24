@@ -3,7 +3,7 @@ name: Build and Package VSCode
 on:
   push:
     branches:
-      - null
+      - main
 
 jobs:
   build_and_package:
@@ -22,8 +22,13 @@ jobs:
       if: startsWith(matrix.os, 'macos') || startsWith(matrix.os, 'ubuntu')
 
     - name: Fetch VSCode Source Code (Windows NT)
-      run: fetch.cmd
+      run: D:\a\vscodeoss-ci\vscodeoss-ci\fetch.cmd
       if: startsWith(matrix.os, 'windows')
+
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v4
+      with:
+        node-version: lts
 
     - name: Install dependencies
       run: |
