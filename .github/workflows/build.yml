@@ -18,7 +18,12 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Fetch VSCode Source Code
-      run: git clone https://github.com/microsoft/vscode.git
+      run: |
+        mkdir src && cd src
+        git init
+        git remote add origin https://github.com/microsoft/vscode.git
+        git fetch origin
+        git checkout --progress --force -B main origin/main        
 
     - name: Setup Node.js environment
       uses: actions/setup-node@v4
