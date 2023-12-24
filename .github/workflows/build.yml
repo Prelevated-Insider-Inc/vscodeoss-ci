@@ -18,7 +18,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Fetch VSCode Source Code
-      run: git clone https://github.com/microsoft/vscode.git src
+      run: git clone https://github.com/microsoft/vscode.git
 
     - name: Setup Node.js environment
       uses: actions/setup-node@v4
@@ -33,43 +33,43 @@ jobs:
 
     - name: Build and Package VSCode for Windows x64
       run: |
-        cd src
+        cd vscode
         yarn gulp vscode-win32-x64
       if: startsWith(matrix.os, 'windows')
 
     - name: Build and Package VSCode for Windows ARM64
       run: |
-        cd src
+        cd vscode
         yarn gulp vscode-win32-arm64
       if: startsWith(matrix.os, 'windows')
 
     - name: Build and Package VSCode for Mac OS X or Darwin x64
       run: |
-        cd src
+        cd vscode
         yarn gulp vscode-darwin-x64
       if: startsWith(matrix.os, 'macos')
 
     - name: Build and Package VSCode for Mac OS X or Darwin ARM64
       run: |
-        cd src
+        cd vscode
         yarn gulp vscode-darwin-arm64
       if: startsWith(matrix.os, 'macos')
 
     - name: Build and Package VSCode for Linux x64
       run: |
-        cd src
+        cd vscode
         yarn gulp vscode-linux-x64
       if: startsWith(matrix.os, 'ubuntu')
 
     - name: Build and Package VSCode for Linux ARMHF
       run: |
-        cd src
+        cd vscode
         yarn gulp vscode-darwin-armhf
       if: startsWith(matrix.os, 'ubuntu')
 
     - name: Build and Package VSCode for Linux ARM64
       run: |
-        cd src
+        cd vscode
         yarn gulp vscode-darwin-armhf
       if: startsWith(matrix.os, 'ubuntu')
 
@@ -77,47 +77,47 @@ jobs:
       uses: actions/upload-artifact@v4.0.0
       with:
         name: VSCode-win32-x64
-        path: src/VSCode-win32-x64
+        path: vscode/VSCode-win32-x64
       if: startsWith(matrix.os, 'windows')
 
     - name: Upload ZIP build artifact for Windows ARM64
       uses: actions/upload-artifact@v4.0.0
       with:
         name: VSCode-win32-arm64
-        path: src/VSCode-win32-arm64
+        path: vscode/VSCode-win32-arm64
       if: startsWith(matrix.os, 'windows')
 
     - name: Upload ZIP build artifact for Mac OS X or Darwin x64
       uses: actions/upload-artifact@v4.0.0
       with:
         name: VSCode-darwin-x64
-        path: src/VSCode-darwin-x64
+        path: vscode/VSCode-darwin-x64
       if: startsWith(matrix.os, 'macos')
 
     - name: Upload ZIP build artifact for Mac OS X or Darwin ARM64
       uses: actions/upload-artifact@v4.0.0
       with:
         name: VSCode-darwin-arm64
-        path: src/VSCode-darwin-arm64
+        path: vscode/VSCode-darwin-arm64
       if: startsWith(matrix.os, 'macos')
 
     - name: Upload ZIP build artifact for Linux x64
       uses: actions/upload-artifact@v4.0.0
       with:
         name: VSCode-linux-x64
-        path: src/VSCode-linux-x64
+        path: vscode/VSCode-linux-x64
       if: startsWith(matrix.os, 'ubuntu')
 
     - name: Upload ZIP build artifact for Linux ARMHF
       uses: actions/upload-artifact@v4.0.0
       with:
         name: VSCode-linux-armhf
-        path: src/VSCode-linux-armhf
+        path: vscode/VSCode-linux-armhf
       if: startsWith(matrix.os, 'ubuntu')
 
     - name: Upload ZIP build artifact for Linux ARM64
       uses: actions/upload-artifact@v4.0.0
       with:
         name: VSCode-linux-arm64
-        path: src/VSCode-linux-arm64
+        path: vscode/VSCode-linux-arm64
       if: startsWith(matrix.os, 'ubuntu')
