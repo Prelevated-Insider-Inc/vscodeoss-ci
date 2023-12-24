@@ -3,7 +3,7 @@ name: Build and Package VSCode
 on:
   push:
     branches:
-      - main
+      - null
 
 jobs:
   build_and_package:
