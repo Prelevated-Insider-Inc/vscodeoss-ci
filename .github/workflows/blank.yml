@@ -1,0 +1,44 @@
+name: Build and Package VSCode
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_package:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        platform: [win32-x64, win32-arm64, darwin-x64, darwin-arm64, linux-x64, linux-armhf, linux-arm64]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Fetch VSCode Source Code (Unix)
+      run: chmod +x fetch.sh && ./fetch.sh
+      if: startsWith(matrix.os, 'macos') || startsWith(matrix.os, 'ubuntu')
+
+    - name: Fetch VSCode Source Code (Windows NT)
+      run: fetch.cmd
+      if: startsWith(matrix.os, 'windows')
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libx11-dev libxkbfile-dev libsecret-1-dev libxss-dev libnss3 libasound2
+      if: startsWith(matrix.os, 'ubuntu')
+
+    - name: Build and Package VSCode
+      run: |
+        cd src
+        yarn gulp vscode-${{ matrix.platform }}
+
+    - name: Upload ZIP build artifact
+      uses: actions/upload-artifact@v4.0.0
+      with:
+        name: VSCode-${{ matrix.platform }}
+        path: src/VSCode-${{ matrix.platform }}
