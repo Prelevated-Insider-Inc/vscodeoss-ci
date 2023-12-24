@@ -17,13 +17,8 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Fetch VSCode Source Code (Unix)
-      run: chmod +x fetch.sh && ./fetch.sh
-      if: startsWith(matrix.os, 'macos') || startsWith(matrix.os, 'ubuntu')
-
-    - name: Fetch VSCode Source Code (Windows NT)
-      run: D:\a\vscodeoss-ci\vscodeoss-ci\fetch.cmd
-      if: startsWith(matrix.os, 'windows')
+    - name: Fetch VSCode Source Code
+      run: git clone https://github.com/microsoft/vscode.git src
 
     - name: Setup Node.js environment
       uses: actions/setup-node@v4
